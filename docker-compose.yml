@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:10.7
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-password}
+      - MARIADB_DATABASE=${DB_NAME:-glpidb}
+      - MARIADB_USER=${DB_USER:-glpi_user}
+      - MARIADB_PASSWORD=${DB_PASSWORD:-glpi}
+    volumes:
+      - ./data/:/var/lib/mysql
+
+  glpi:
+    image: diouxx/glpi
+    restart: always
+    environment:
+      - TIMEZONE=${TIMEZONE:-America/Sao_Paulo}
+    ports:
+      - ${HTTP_PORT:-2332}:80
+    volumes:
+      - ./www/:/var/www/html/glpi
